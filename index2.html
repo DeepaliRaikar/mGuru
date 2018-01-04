@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Scrabble</title>
+		<style type="text/css">
+			.scrabble-outer-container{
+				padding: 20px;
+				background-color: #fffeea;
+				width: 50%;
+				margin: 30px auto;
+				box-shadow: 0 0 4px 0 #ababab;
+			}
+			#scrabble-container{
+				margin-left: 2em;
+				width: 90%;
+				margin-left: auto;
+				margin-right: auto;
+			}
+			#available-alphabets div, #transferred-alphabets div{
+				padding: 5px;
+				border-radius: 3px;
+				margin: 10px auto 10px auto;
+				height: 30px;
+				width: 30px;
+				background-image: url('img/background.jpg');
+				background-size: cover;
+				display: inline-block;
+				text-align: center;
+				line-height: 30px;
+				font-size: 20px;
+				text-transform: uppercase;
+				display: block;
+				box-shadow: 0 0 2px 0 #000000;
+			}
+			#available-alphabets div sub, #transferred-alphabets div sub{
+				font-size: 10px;
+			}
+			#available-alphabets{
+				background-color: #bcbcbc;
+				border: 2px dashed transparent;
+				float: left;
+				padding: 5px;
+				display: block;
+				width: 40%;
+			}
+			#transferred-alphabets{
+				border: 2px dashed #cdcdcd;
+				border-radius: 5px;
+				float: right;
+				padding: 5px;
+				display: block;
+				width: 40%;
+			}
+			.word-display{
+				padding: 10px;
+				font-size: 30px;
+				text-transform: uppercase;
+				display: block;
+				letter-spacing: 3px;
+			}
+			.clearfix{
+				float: none;
+				clear: both;
+				display: block;
+			}
+			
+			@media only screen and (max-width: 768px){
+				.scrabble-outer-container{
+					width: 90%;
+					margin-left: auto;
+					margin-right: auto;
+				}
+			}
+		</style>
+	</head>
+	<body>
+
+		<div class="scrabble-outer-container">
+		    <div id="scrabble-container" class="postbox">
+		      	<h3>Move characters from left container to the right container to form a word</h3>
+	            <div id="available-alphabets" class="sortable">
+	                <div class="alphabets"><span>a</span><sub>1</sub></div>
+	                <div class="alphabets"><span>e</span><sub>1</sub></div>
+	                <div class="alphabets"><span>b</span><sub>4</sub></div>
+	                <div class="alphabets"><span>c</span><sub>3</sub></div>
+	                <div class="alphabets"><span>o</span><sub>1</sub></div>
+	                <div class="alphabets"><span>c</span><sub>3</sub></div>
+	                <div class="alphabets"><span>o</span><sub>1</sub></div>
+	            </div>
+
+	            <div id="transferred-alphabets" class="sortable">
+	            </div>
+	            <div class="clearfix"></div>
+	           	<div class="display">
+	           		<h2>Word Formed</h2>
+	            	<div class="word-display">
+	            	
+		            </div>
+		        </div>
+		    </div>
+		</div>
+
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function () {
+			  $('div#scrabble-container').find('div.sortable').sortable({
+			    	connectWith: 'div.sortable'
+			    });
+			  if($("#transferred-alphabets").children().length != 0)
+			    	$(".word-display").html($("#transferred-alphabets").text().replace(/\d+/g, ''));
+			    else{
+			    	$(".word-display").html("Sorry! You have not formed any words yet").css('letter-spacing','0');
+			    }
+			});
+			$.fn.extend({ 
+				getMaxHeight: function() {  
+		        	var maxHeight = -1;
+			        this.each(function() {     
+			        	var height = $(this).height();
+				        maxHeight = maxHeight > height ? maxHeight : height;   
+			        }); 
+			        return maxHeight;
+			  	}
+			});
+
+			function setMenusDivHeight($attributeDivs) {
+			    return $attributeDivs.css('min-height', $attributeDivs.getMaxHeight());
+			}
+
+			setMenusDivHeight($('div#scrabble-container').find('div.sortable')).sortable({
+				connectWith: 'div.sortable',
+			  	start: function( event, ui ) {
+			    	// setMenusDivHeight(ui.item.closest('table#tblAttachAttributes').find('div.sortable')).css('box-shadow', '0 0 10px blue');
+			  	},
+			  	stop: function( event, ui ) {
+			  		if($("#transferred-alphabets").children().length != 0)
+				    	$(".word-display").html($("#transferred-alphabets").text().replace(/\d+/g, ''));
+				    else{
+				    	$(".word-display").html("Sorry! You have not formed any words yet").css('letter-spacing','0');
+				    }
+				    if($("#available-alphabets").children(".alphabets").length == 0){
+				    	alert("Wohoo! You are awesome");				    }
+
+			    	// setMenusDivHeight(ui.item.closest('table#tblAttachAttributes').find('div.sortable')).css('box-shadow', '');
+			    	// console.log("here");
+			  	}
+			});
+		</script>
+	</body>
+</html>
